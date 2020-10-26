@@ -20,7 +20,9 @@ export class CommentsComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private commentsService: CommentsService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {
+      this.buildCommentForm();
+  }
 
   ngOnInit(): void {
      // tslint:disable-next-line: radix
@@ -28,29 +30,22 @@ export class CommentsComponent implements OnInit {
      if (this.id !== 0){
         this.commentsService.getComment(this.id).subscribe(resp => {
           this.commentDetail = resp.result;
+          this.buildCommentForm(this.commentDetail);
         });
      }
-     this.buildCommentForm(this.commentDetail);
+
   }
 
   buildCommentForm(comments?: Comments) {
     this.commentForm = this.fb.group({
-      name:              [((comments) && (comments.name)) ? comments.name.toString() : '', [Validators.required, Validators.pattern('^(?=.*[a-zA-Z])$'), Validators.maxLength(35)]],
-      // tslint:disable-next-line: max-line-length
-      email:             [((comments) && (comments.email)) ? comments.email.toString() : '',  [Validators.required], Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
-      content:           [((comments) && (comments.content)) ? comments.content.toString() : '', [Validators.required, Validators.pattern('^(?=.*[a-zA-Z])$'), Validators.maxLength(100)]],
+      name:              [((comments) && (comments.name)) ? comments.name.toString() : '', [Validators.required, Validators.pattern('^[A-Za-z]+$'), Validators.maxLength(35)]],
+      email:             [((comments) && (comments.email)) ? comments.email.toString() : '',  [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]],
+      content:           [((comments) && (comments.content)) ? comments.content.toString() : '', [Validators.required, Validators.pattern('^[A-Za-z]+$'), Validators.maxLength(100)]],
       website:           [((comments) && (comments.website)) ? comments.website.toString() : '', [Validators.pattern('(http?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]],
    });
   }
 
-  buildCommentFormData(comments: Comments): FormData{
-    const formData: FormData = new FormData();
-    formData.append('name', comments.name);
-    formData.append('email', comments.email);
-    formData.append('website', comments.website);
-    formData.append('content', comments.content);
-    return formData;
-  }
+  
 
   save(){
 
@@ -63,14 +58,16 @@ export class CommentsComponent implements OnInit {
     Swal.showLoading();
 
     if (this.id === 0){
-      this.commentsService.createComment(this.buildCommentFormData(this.commentForm.value)).subscribe(resp => {
+      this.commentsService.createComment(this.commentForm.value).subscribe(resp => {
         Swal.fire('Comentario', 'Se ha guardado el comentario', 'success');
+        this.router.navigate(['comments']);
       }, error => {
         Swal.fire('Error al Guardar Comentario', 'No se ha creado el Comentario, ocurrió un error', 'error');
       });
     }else{
-      this.commentsService.updateComment(this.id, this.buildCommentFormData(this.commentForm.value)).subscribe(resp => {
+      this.commentsService.updateComment(this.id, this.commentForm.value).subscribe(resp => {
         Swal.fire('Comentario', 'Se ha actualizado el comentario', 'success');
+        this.router.navigate(['comments']);
       }, error => {
         Swal.fire('Error al Guardar Comentario', 'No se ha actualizado el Comentario, ocurrió un error', 'error');
       });
@@ -78,7 +75,7 @@ export class CommentsComponent implements OnInit {
   }
 
   back(){
-
+    this.router.navigate(['comments']);
   }
 
 }

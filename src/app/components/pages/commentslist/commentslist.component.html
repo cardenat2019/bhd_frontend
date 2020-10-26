@@ -1,9 +1,9 @@
 <div class="card border-primary mb-8">
-    <div>
-        <button class="btn btn-outline-primary" (click)="newComment()"><i class="plus-circle"></i> Agregar Comentario</button>
+    <div class="card-body">
+        <button class="btn btn-outline-dark" (click)="newComment()"><i class="plus-circle"></i> Agregar Comentario</button>
     </div>
-    <div>
-        <input type="text" value="" placeholder="Buscar"/>
+    <div class="card-body">
+        <input type="text" value="" placeholder="Buscar" (onchange)="search()"/>
     </div>
     <div class="card-body text-primary"> 
         <table class="table table-bordered table-striped">
@@ -18,7 +18,7 @@
                     <td>{{comment.name}}</td>
                     <td>{{comment.email}}</td>
                     <td>{{comment.website}}</td>
-                    <td><button class="btn btn-outline-info" (click)="editComment(comment)">Editar</button></td>
+                    <td><button class="btn btn-outline-dark" (click)="editComment(comment)">Editar</button></td>
                 </tr>
             </tbody>
         </table>
