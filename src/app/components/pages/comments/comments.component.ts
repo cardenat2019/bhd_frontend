@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Comments } from 'src/app/models/comments';
@@ -17,11 +17,16 @@ export class CommentsComponent implements OnInit {
   commentForm: FormGroup;
   commentDetail: Comments;
 
+  @Input() title = 'Nuevo Comentario';
+  @Output() sendChangeTitle  = new EventEmitter<any>();
+  event: string;
+
   constructor(private fb: FormBuilder,
               private commentsService: CommentsService,
               private route: ActivatedRoute,
               private router: Router) {
       this.buildCommentForm();
+      this.changeTitle();
   }
 
   ngOnInit(): void {
@@ -31,6 +36,8 @@ export class CommentsComponent implements OnInit {
         this.commentsService.getComment(this.id).subscribe(resp => {
           this.commentDetail = resp.result;
           this.buildCommentForm(this.commentDetail);
+          this.title = 'Editar Comentario';
+          this.changeTitle();
         });
      }
 
@@ -44,8 +51,6 @@ export class CommentsComponent implements OnInit {
       website:           [((comments) && (comments.website)) ? comments.website.toString() : '', [Validators.pattern('(http?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]],
    });
   }
-
-  
 
   save(){
 
@@ -76,6 +81,10 @@ export class CommentsComponent implements OnInit {
 
   back(){
     this.router.navigate(['comments']);
+  }
+
+  changeTitle(){
+    this.sendChangeTitle.emit({title: this.title, event: this.event});
   }
 
 }

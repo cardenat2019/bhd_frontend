@@ -30,7 +30,7 @@ export class CommentslistComponent implements OnInit {
     this.router.navigate([`comments/${comment.id}`]);
   }
 
-  search(data){
+  search(){
 
   }
 
