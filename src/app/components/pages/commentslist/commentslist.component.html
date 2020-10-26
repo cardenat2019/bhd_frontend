@@ -1,0 +1,26 @@
+<div class="card border-primary mb-8">
+    <div>
+        <button class="btn btn-outline-primary" (click)="newComment()"><i class="plus-circle"></i> Agregar Comentario</button>
+    </div>
+    <div>
+        <input type="text" value="" placeholder="Buscar"/>
+    </div>
+    <div class="card-body text-primary"> 
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <th width="25%">Nombre</th>
+                <th width="25%">Email</th>
+                <th width="40%">Website</th>
+                <th>Acción</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let comment of commentsList">
+                    <td>{{comment.name}}</td>
+                    <td>{{comment.email}}</td>
+                    <td>{{comment.website}}</td>
+                    <td><button class="btn btn-outline-info" (click)="editComment(comment)">Editar</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div> 

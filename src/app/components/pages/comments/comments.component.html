@@ -1,0 +1,45 @@
+<div class="content">
+    <form [formGroup]='commentForm' autocomplete="off" onsubmit="save()">
+        <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" formControlName="name" class="form-control">
+            <div *ngIf="commentForm.get('name').touched && commentForm.get('name').invalid" class="text-danger">
+                <div *ngIf="commentForm.get('name').errors.required">El nombre es requerido.</div>
+                <div *ngIf="commentForm.get('name').errors.maxlength">Longitud de nombre no debe exceder 35 caracteres.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" formControlName="email" class="form-control">
+            <div *ngIf="commentForm.get('email').touched && commentForm.get('email').invalid" class="text-danger">
+                <div *ngIf="commentForm.get('email').errors.required">El Email es requerido.</div>
+                <div *ngIf="commentForm.get('email').errors.email">Email inválido.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="website">Página Web</label>
+            <input type="url" formControlName="website" class="form-control">
+            <div *ngIf="commentForm.get('website').touched && commentForm.get('website').invalid" class="text-danger">
+                <div *ngIf="commentForm.get('website').errors.pattern">Website inválido.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="content">Comentario</label>
+            <textarea class="form-control" rows="4" formControlName="content" ></textarea>
+            <div *ngIf="commentForm.get('content').touched && commentForm.get('content').invalid" class="text-danger">
+                <div *ngIf="commentForm.get('content').errors.required">El Comentario es requerido.</div>
+                <div *ngIf="commentForm.get('content').errors.maxlength">Comentario no puede exceder los 100 caracteres.</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-outline-primary" [disabled]="!commentForm.valid">Guardar</button>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-outline-warning" (click)="back()">Regresar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
